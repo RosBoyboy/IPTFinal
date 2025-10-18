@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../sass/_login.scss';
+import { FaUserAlt, FaLock, FaSignInAlt } from 'react-icons/fa';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -15,7 +17,6 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      // ensure CSRF cookie issued, then post to web /login route (CSRF middleware)
       await axios.get('/sanctum/csrf-cookie');
       const resp = await axios.post('/login', { username, password });
       if (resp.data.success) {
@@ -29,26 +30,45 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-        {error && <div className="error">{error}</div>}
-      </form>
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-card-top">
+          <h1 className="card-title">SFMS Management<br/>System</h1>
+        </div>
+
+        <form className="login-card-body" onSubmit={handleSubmit}>
+          <label className="field-label">Username</label>
+          <div className="input-group">
+            <span className="input-icon"><FaUserAlt /></span>
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+
+          <label className="field-label">Password</label>
+          <div className="input-group">
+            <span className="input-icon"><FaLock /></span>
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="login-button">
+            <FaSignInAlt className="btn-icon" />
+            Login
+          </button>
+
+          {error && <div className="error">{error}</div>}
+        </form>
+      </div>
     </div>
   );
 };
